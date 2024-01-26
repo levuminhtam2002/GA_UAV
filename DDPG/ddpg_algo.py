@@ -21,7 +21,7 @@ tf.compat.v1.disable_eager_execution()
 
 #####################  hyper parameters  ####################
 
-MAX_EPISODES = 10
+MAX_EPISODES = 1000
 # MAX_EPISODES = 50000
 
 LR_A = 0.001  # learning rate for actor
@@ -177,6 +177,8 @@ for i in range(MAX_EPISODES):
         a = ddpg.choose_action(s_normal.state_normal(s))
         a = np.clip(np.random.normal(a, var), *a_bound)  # 高斯噪声add randomness to action selection for exploration
         s_, r, is_terminal, step_redo, offloading_ratio_change, reset_dist = env.step(a)
+        if i == 1:
+            print(env.e_battery_uav)
         if step_redo:
             continue
         if reset_dist:

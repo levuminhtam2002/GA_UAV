@@ -98,7 +98,7 @@ class UAVEnv(object):
         #################寻找最优的服务对象UE######################
         ue_id = int(action / (11 ** 3))  # 11**3 = 1331
         action = action % 1331
-        
+
         theta = int(action / 121) * 0.1 * np.pi * 2  # 角度
         action = action % 121
         dis_fly = int(action / 11) * 0.1 * self.flight_speed * 1  # 1s飞行距离

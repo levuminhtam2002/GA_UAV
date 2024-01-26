@@ -4,10 +4,10 @@ import random
 import numpy as np
 
 
-class UAVEnv(object):
+class UAVEnv_(object):
     height = ground_length = ground_width = 100  # 场地长宽均为100m，UAV飞行高度也是 - Chiều dài và chiều rộng của địa điểm và chiều cao chuyến bay của UAV cũng là 100m 
     sum_task_size = 100 * 1048576  # 总计算任务60 Mbits --> 60 80 100 120 140 - Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
-    loc_uav = [99.65, 50.21]
+    loc_uav = [50, 50]
     bandwidth_nums = 1
     B = bandwidth_nums * 10 ** 6  # 带宽1MHz - Băng thông 1MHz
     p_noisy_los = 10 ** (-13)  # 噪声功率-100dBm - Công suất tiếng ồn -100dBm
@@ -30,7 +30,7 @@ class UAVEnv(object):
     e_battery_uav = 500000  # uav电池电量: 500kJ. ref: Mobile Edge Computing via a UAV-Mounted Cloudlet: Optimization of Bit Allocation and Path Planning
 
     #################### ues ####################
-    M = 5  # UE数量 - Số lượng UE
+    M = 4  # UE数量 - Số lượng UE
     block_flag_list = np.random.randint(0, 2, M)  # 4个ue，ue的遮挡情况 - tắc của ue
     loc_ue_list = np.random.randint(0, 101, size=[M, 2])  # 位置信息:x在0-100随机 - Thông tin vị trí: x là ngẫu nhiên từ 0-100
     # task_list = np.random.randint(1572864, 2097153, M)      # 随机计算任务1.5~2Mbits ->对应总任务大小60 - Tác vụ tính toán ngẫu nhiên 1,5~2Mbits -> tổng kích thước tác vụ tương ứng 60
@@ -50,6 +50,7 @@ class UAVEnv(object):
     # 4. biểu thị tốc độ hoàn thành tác vụ hiện tại trên ue ?? tỉ lệ offloading task trên ue
     state_dim = 4 + M * 4  # uav battery remain, uav loc, remaining sum task size, all ue loc, all ue task size, all ue block_flag
     act = np.random.rand(1,M)
+    act = act.reshape(M)
 
     def __init__(self):
         # uav battery remain, uav loc, remaining sum task size, all ue loc, all ue task size, all ue block_flag
@@ -100,7 +101,7 @@ class UAVEnv(object):
         is_terminal = False
         offloading_ratio_change = False
         reset_dist = False
-        action = action.flatten()
+        # action_1 = action.flatten()
         #action = (action + 1) / 2  # 将取值区间位-1~1的action -> 0~1的action。避免原来action_bound为[0,1]时训练actor网络tanh函数一直取边界0
         #Các hành động đặt phạm vi giá trị từ -1~1 -> hành động từ 0~1. Tránh huấn luyện hàm tanh mạng tác nhân luôn lấy ranh giới 0 khi giới hạn hành động ban đầu là [0,1]
         #################寻找最优的服务对象UE###################### ~ Tìm đối tượng dịch vụ tối ưu UE
