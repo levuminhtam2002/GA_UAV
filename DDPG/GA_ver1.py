@@ -47,10 +47,10 @@ OUTPUT_GRAPH = False
 chromo = 50
 nmbpopu = 64
 populationLimit = 128
-mutation_rate = 0.25
-mutation_rate_1 = 0.25
-mutation_rate_2 = 0.25
-generations = 500
+mutation_rate = 0.3
+mutation_rate_1 = 0.3
+mutation_rate_2 = 0.3
+generations = 1000
 x = [] 
 e = 1e-3
 population = []
@@ -452,7 +452,8 @@ for i in range(MAX_EPISODES):
                 file_name = 'output_ga_ver1_DDPG.txt'
                 with open(file_name, 'a') as file_obj:
                     #file_obj.write("\n======== This episode is done ========")  # 本episode结束
-                    print('Episode:', i, ' Steps: %2d' % j, ' Reward: %7.2f' % ep_reward, 'Explore: %.3f' % var, file = file_obj)
+                    # print('Episode:', i, ' Steps: %2d' % j, ' Reward: %7.2f' % ep_reward, 'Explore: %.3f' % var, file = file_obj)
+                    print('Generation:', i,' Reward: %7.2f' % bestState._ep_reward, 'mutation_rate: %.3f' % var, file = file_obj)
                     # Print and write the episode information to the file with a newline character
                 population = np.append(population,idv_)
                 break

@@ -61,7 +61,7 @@ def GA():
             i2 = (i1 + 1 + np.random.randint(len(population) - 1)) % len(population)
             parent1 = population[i1]
             parent2 = population[i2]
-            if np.random.rand() < 0.3:
+            if np.random.rand() < 0.5:
                 child1, child2 = crossOver(parent1,parent2) 
                 if  np.random.rand() < mutation_rate:
                     mutation(child1)
