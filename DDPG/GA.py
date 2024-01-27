@@ -222,7 +222,7 @@ def mutation(self):
     update(self)
 
 def mutation1(self):
-    x = np.random.randint(len(self.genes),size = 10)
+    x = np.random.randint(len(self.genes),size = 1)
     for i in range(len(x)):
         for j in range(self.genes[x[i]].M):  
             tmp = np.random.rand(2)
@@ -236,7 +236,7 @@ def mutation1(self):
     update(self)
 
 def mutation2(self):
-    x = np.random.randint(len(self.genes),size = 10)
+    x = np.random.randint(len(self.genes),size = 1)
     for i in range(len(x)):
         tmp = np.random.rand(2)
         theta_uav = tmp[0] * np.pi * 2

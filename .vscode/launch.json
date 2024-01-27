@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/TAM/Documents/GIT/UAV-DDPG2023",
-      "program": "c:/Users/TAM/Documents/GIT/UAV-DDPG2023/build/Debug/outDebug",
+      "cwd": "c:/Users/TAM/Documents/GIT/GA_UAV",
+      "program": "c:/Users/TAM/Documents/GIT/GA_UAV/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
