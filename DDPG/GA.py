@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 chromo = 50
 nmbpopu = 64
 populationLimit = 128
-mutation_rate = 0.4
-mutation_rate_1 = 0.4
-mutation_rate_2 = 0.4
+mutation_rate = 0.3
+mutation_rate_1 = 0.3
+mutation_rate_2 = 0.3
 generations = 1000
 x = [] 
 e = 1e-3
