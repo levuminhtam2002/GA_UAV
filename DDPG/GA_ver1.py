@@ -38,13 +38,13 @@ GAMMA = 0.001  # optimal reward discount
 TAU = 0.01  # soft replacement
 VAR_MIN = 0.01
 # MEMORY_CAPACITY = 5000
-MEMORY_CAPACITY = 500
+MEMORY_CAPACITY = 5000
 BATCH_SIZE = 64
 OUTPUT_GRAPH = False
 
 #-----------------------------------------------------------#
 
-chromo = 50
+chromo = 0
 nmbpopu = 64
 populationLimit = 128
 mutation_rate = 0.3
