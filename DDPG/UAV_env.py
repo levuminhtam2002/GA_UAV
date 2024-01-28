@@ -30,7 +30,7 @@ class UAVEnv(object):
     e_battery_uav = 500000  # uav电池电量: 500kJ. ref: Mobile Edge Computing via a UAV-Mounted Cloudlet: Optimization of Bit Allocation and Path Planning
 
     #################### ues ####################
-    M = 4  # UE数量 - Số lượng UE
+    M = 6  # UE数量 - Số lượng UE
     block_flag_list = np.random.randint(0, 2, M)  # 4个ue，ue的遮挡情况 - tắc của ue
     loc_ue_list = np.random.randint(0, 101, size=[M, 2])  # 位置信息:x在0-100随机 - Thông tin vị trí: x là ngẫu nhiên từ 0-100
     # task_list = np.random.randint(1572864, 2097153, M)      # 随机计算任务1.5~2Mbits ->对应总任务大小60 - Tác vụ tính toán ngẫu nhiên 1,5~2Mbits -> tổng kích thước tác vụ tương ứng 60
