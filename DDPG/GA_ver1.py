@@ -44,7 +44,7 @@ OUTPUT_GRAPH = False
 
 #-----------------------------------------------------------#
 
-chromo = 0
+chromo = 50
 nmbpopu = 64
 populationLimit = 128
 mutation_rate = 0.3
