@@ -173,6 +173,7 @@ class UAVEnv(object):
             self.reset2(delay, loc_uav_after_fly_x, loc_uav_after_fly_y, offloading_ratio, task_size,
                                         ue_id)   # 重置ue任务大小，剩余总任务大小，ue位置，并记录到文件
 
+        
         self.write_offloading_average()
 
         return self._get_obs(), reward, is_terminal, step_redo, offloading_ratio_change, reset_dist
