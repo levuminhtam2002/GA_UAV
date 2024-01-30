@@ -59,6 +59,14 @@ class UAVEnv(object):
         self.start_state = np.append(self.start_state, self.task_list)
         self.start_state = np.append(self.start_state, self.block_flag_list)
         self.state = self.start_state
+        self.total_offloading_ratio = 0
+        self.total_steps = 0
+    def write_offloading_average(self):
+        if self.total_steps > 0:
+            average_offloading = self.total_offloading_ratio / self.total_steps
+            with open('offloading_average.txt', 'a') as file:
+                file.write(f'Step: {self.total_steps} Average Offloading Ratio: {average_offloading:.2f}\n')
+
 
     def reset_env(self):
         self.sum_task_size = 100 * 1048576  # 总计算任务60 Mbits -> 60 80 100 120 140
@@ -127,11 +135,12 @@ class UAVEnv(object):
         dy_uav = dis_fly * math.sin(theta)
         loc_uav_after_fly_x = self.loc_uav[0] + dx_uav
         loc_uav_after_fly_y = self.loc_uav[1] + dy_uav
-
+        self.total_offloading_ratio += offloading_ratio
+        self.total_steps += 1
         # 服务器计算耗能
         t_server = offloading_ratio * task_size / (self.f_uav / self.s)  # 在UAV边缘服务器上计算时延 - Độ trễ tính toán trên máy chủ UAV Edge
         e_server = self.r * self.f_uav ** 3 * t_server  # 在UAV边缘服务器上计算耗能 - mức tiêu thụ năng lượng trên UAV edge
-
+        
         if self.sum_task_size == 0:  # 计算任务全部完成
             is_terminal = True
             reward = 0
@@ -164,7 +173,10 @@ class UAVEnv(object):
             self.reset2(delay, loc_uav_after_fly_x, loc_uav_after_fly_y, offloading_ratio, task_size,
                                         ue_id)   # 重置ue任务大小，剩余总任务大小，ue位置，并记录到文件
 
+        self.write_offloading_average()
+
         return self._get_obs(), reward, is_terminal, step_redo, offloading_ratio_change, reset_dist
+        # return self._get_obs(), reward, is_terminal, step_redo, offloading_ratio_change, reset_dist
 
     # 重置ue任务大小，剩余总任务大小，ue位置，并记录到文件
     # Đặt lại kích thước tác vụ ue, tổng kích thước tác vụ còn lại, vị trí ue và ghi vào tệp
