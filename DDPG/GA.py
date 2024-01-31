@@ -4,9 +4,9 @@ from UAV_env import UAVEnv
 import copy
 import matplotlib.pyplot as plt
 
-chromo = 50
-nmbpopu = 64
-populationLimit = 128
+chromo = 200
+nmbpopu = 256
+populationLimit = 512
 mutation_rate = 0.3
 mutation_rate_1 = 0.3
 mutation_rate_2 = 0.3
