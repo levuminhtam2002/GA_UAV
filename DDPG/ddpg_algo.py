@@ -24,8 +24,8 @@ tf.compat.v1.disable_eager_execution()
 MAX_EPISODES = 2000
 # MAX_EPISODES = 50000
 
-LR_A = 0.001  # learning rate for actor
-LR_C = 0.002  # learning rate for critic
+LR_A = 0.01  # learning rate for actor
+LR_C = 0.02  # learning rate for critic
 # LR_A = 0.1  # learning rate for actor
 # LR_C = 0.2  # learning rate for critic
 GAMMA = 0.001  # optimal reward discount
