@@ -172,23 +172,43 @@ class DDPG(object):
 
 
 class Indv(object):
+    # def __init__(self):
+    #     self.genes = []
+    #     self._ep_reward = 0
+    #     self._ep_reward_list = []
+    # def _add_state(self):
+    #     env = UAVEnv()
+    #     #self.genes = np.append(self.genes,copy.deepcopy(env))
+    #     for i in range(chromo):
+    #         action = np.random.uniform(-1,1,size = (env.M,))
+    #         env.act = (action + 1) / 2
+    #         _env = copy.deepcopy(env)
+    #         s_, r, is_terminal, step_redo, offloading_ratio_change, reset_dist = env.step(action)
+    #         _env.sum_task_size = env.sum_task_size
+    #         _env.e_battery_uav = env.e_battery_uav
+    #         self._ep_reward += r
+    #         self._ep_reward_list = np.append(self._ep_reward_list,r)
+    #         self.genes = np.append(self.genes,_env)
+    #         if is_terminal or step_redo:
+    #             break
     def __init__(self):
-        self.genes = []
+        self.genes = []  # Now each gene will store a tuple of (UAVEnv state, action)
         self._ep_reward = 0
         self._ep_reward_list = []
-    def _add_state(self):
+
+    def _add_state(self, chromo):
         env = UAVEnv()
-        #self.genes = np.append(self.genes,copy.deepcopy(env))
         for i in range(chromo):
-            action = np.random.uniform(-1,1,size = (env.M,))
+            action = np.random.uniform(-1, 1, size=(env.M,))
             env.act = (action + 1) / 2
             _env = copy.deepcopy(env)
             s_, r, is_terminal, step_redo, offloading_ratio_change, reset_dist = env.step(action)
             _env.sum_task_size = env.sum_task_size
             _env.e_battery_uav = env.e_battery_uav
             self._ep_reward += r
-            self._ep_reward_list = np.append(self._ep_reward_list,r)
-            self.genes = np.append(self.genes,_env)
+            self._ep_reward_list = np.append(self._ep_reward_list, r)
+            # Store both environment state and action
+            self.genes.append((_env, action))
             if is_terminal or step_redo:
                 break
 
@@ -225,15 +245,14 @@ def crossOver(a,b):
     update(n2)
     return n1,n2
 def adjust_task_sizes(n1, n2, tasks):
-    sum1 = sum(n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] for k in range(len(tasks)))
-    sum2 = sum(n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] for k in range(len(tasks)))
+    sum1 = sum(n1.genes[k][0].task_list[n1.genes[k][1][0] * n1.genes[k][0].M] for k in range(len(tasks)))
+    sum2 = sum(n2.genes[k][0].task_list[n2.genes[k][1][0] * n2.genes[k][0].M] for k in range(len(tasks)))
     
     for k in range(len(tasks)):
-        n1_factor = n1.genes[0].sum_task_size / sum1
-        n2_factor = n2.genes[0].sum_task_size / sum2
-        n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] *= n1_factor
-        n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] *= n2_factor
-
+        n1_factor = n1.genes[0][0].sum_task_size / sum1
+        n2_factor = n2.genes[0][0].sum_task_size / sum2
+        n1.genes[k][0].task_list[n1.genes[k][1][0] * n1.genes[k][0].M] *= n1_factor
+        n2.genes[k][0].task_list[n2.genes[k][1][0] * n2.genes[k][0].M] *= n2_factor
 
 
 
