@@ -220,9 +220,20 @@ def crossOver(a,b):
         n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] *= n1.genes[0].sum_task_size/sum1
         n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] *= n2.genes[0].sum_task_size/sum2
     ..."""
+    adjust_task_sizes(n1, n2, a.genes)
     update(n1)
     update(n2)
     return n1,n2
+def adjust_task_sizes(n1, n2, tasks):
+    sum1 = sum(n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] for k in range(len(tasks)))
+    sum2 = sum(n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] for k in range(len(tasks)))
+    
+    for k in range(len(tasks)):
+        n1_factor = n1.genes[0].sum_task_size / sum1
+        n2_factor = n2.genes[0].sum_task_size / sum2
+        n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] *= n1_factor
+        n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] *= n2_factor
+
 
 
 

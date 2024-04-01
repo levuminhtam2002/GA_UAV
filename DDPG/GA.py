@@ -53,8 +53,8 @@ def GA():
         idv = Indv()
         idv._add_state()
         population = np.append(population,idv)
-        for i in range(len(idv.genes)):
-            print(idv.genes[i].sum_task_size)
+        # for i in range(len(idv.genes)):
+        #     print(idv.genes[i].sum_task_size)
     for i in range(generations):
         while(len(population) < populationLimit):
             i1 = np.random.randint(len(population))
@@ -102,23 +102,20 @@ def crossOver(a,b):
         n1.genes[i] = b.genes[i]
         n2.genes[i] = a.genes[i]
         i = i + 1
-    """...
+   
     sum1 = 0
     sum2 = 0
-    for k in range(len(a)):
+    for k in range(x):
         task_size1 = n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] 
         task_size2 = n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] 
         sum1 += task_size1
         sum2 += task_size2
-    for k in range(len(a)):
+    for k in range(x):
         n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] *= n1.genes[0].sum_task_size/sum1
         n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] *= n2.genes[0].sum_task_size/sum2
-    ..."""
     update(n1)
     update(n2)
     return n1,n2
-
-
 
 def update(self):
     env_ = UAVEnv()
