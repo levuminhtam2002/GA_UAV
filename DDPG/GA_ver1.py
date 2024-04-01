@@ -252,15 +252,27 @@ def adjust_task_sizes(offspring1, offspring2):
         for gene in offspring.genes:
             gene.adjust_tasks(adjustment_factor)
 
+
 def crossOver(parent1, parent2):
+    # Ensure there's at least one gene to perform crossover
     min_length = min(len(parent1.genes), len(parent2.genes))
+    
+    # If there are not enough genes for crossover, return copies of the parents
+    if min_length < 2:
+        return copy.deepcopy(parent1), copy.deepcopy(parent2)
+    
+    # Proceed with crossover as before
     i1, i2 = np.sort(np.random.choice(range(min_length), 2, replace=False))
     offspring1, offspring2 = copy.deepcopy(parent1), copy.deepcopy(parent2)
+    
     for i in range(i1, i2 + 1):
         offspring1.genes[i], offspring2.genes[i] = offspring2.genes[i], offspring1.genes[i]
+    
+    # Assuming adjust_task_sizes and update are defined and handle any number of genes correctly
     adjust_task_sizes(offspring1, offspring2)
     update(offspring1)
     update(offspring2)
+    
     return offspring1, offspring2
 
 
