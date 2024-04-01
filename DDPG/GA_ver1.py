@@ -367,19 +367,31 @@ def update(self):
     self.genes[i] = copy.deepcopy(env_)
     
 
+# def mutation(self):
+#     i1 = np.random.randint(len(self.genes))
+#     i2 = (i1 + 1 + np.random.randint(len(self.genes) - 1)) % (len(self.genes))
+#     while True:
+#         env_ = UAVEnv()
+#         self.genes[i1] = env_
+#         self.genes[i1] = self.genes[i2]
+#         self.genes[i2] = env_
+#         i1 = (i1 + 1) % len(self.genes)
+#         i2 = (i2 - 1) % len(self.genes)
+#         if(i1 == i2 or abs(i1 - i2) == 1):
+#             break
+#     update(self)
 def mutation(self):
-    i1 = np.random.randint(len(self.genes))
-    i2 = (i1 + 1 + np.random.randint(len(self.genes) - 1)) % (len(self.genes))
-    while True:
+    gene_count = len(self.genes)
+    if gene_count > 1:
+        i1 = np.random.randint(gene_count)
+        i2 = (i1 + 1 + np.random.randint(gene_count - 1)) % gene_count
         env_ = UAVEnv()
-        self.genes[i1] = env_
-        self.genes[i1] = self.genes[i2]
-        self.genes[i2] = env_
-        i1 = (i1 + 1) % len(self.genes)
-        i2 = (i2 - 1) % len(self.genes)
-        if(i1 == i2 or abs(i1 - i2) == 1):
-            break
+        self.genes[i1], self.genes[i2] = self.genes[i2], env_
+
+    elif gene_count == 1:
+        self.genes[0] = UAVEnv()
     update(self)
+
 
 # def mutation1(self):
 #     x = np.random.randint(len(self.genes),size = 10)
