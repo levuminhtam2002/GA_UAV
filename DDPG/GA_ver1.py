@@ -381,30 +381,56 @@ def mutation(self):
             break
     update(self)
 
+# def mutation1(self):
+#     x = np.random.randint(len(self.genes),size = 10)
+#     for i in range(len(x)):
+#         for j in range(self.genes[x[i]].M):  
+#             tmp = np.random.rand(2)
+#             theta_ue = tmp[0] * np.pi * 2  
+#             dis_ue = tmp[1] * self.genes[0].delta_t * self.genes[0].v_ue  
+#             self.genes[x[i]].loc_ue_list[j][0] = self.genes[x[i]].loc_ue_list[j][0] + math.cos(theta_ue) * dis_ue
+#             self.genes[x[i]].loc_ue_list[j][1] = self.genes[x[i]].loc_ue_list[j][1] + math.sin(theta_ue) * dis_ue
+#             self.genes[x[i]].loc_ue_list[j] = np.clip(self.genes[x[i]].loc_ue_list[j], 0, self.genes[x[i]].ground_width)
+#         self.genes[x[i]].task_list = np.random.randint(2621440, 3145729, self.genes[0].M)
+#         self.genes[x[i]].block_flag_list = np.random.randint(0, 2, self.genes[0].M)  
+#     update(self)
 def mutation1(self):
-    x = np.random.randint(len(self.genes),size = 10)
-    for i in range(len(x)):
-        for j in range(self.genes[x[i]].M):  
-            tmp = np.random.rand(2)
-            theta_ue = tmp[0] * np.pi * 2  
-            dis_ue = tmp[1] * self.genes[0].delta_t * self.genes[0].v_ue  
-            self.genes[x[i]].loc_ue_list[j][0] = self.genes[x[i]].loc_ue_list[j][0] + math.cos(theta_ue) * dis_ue
-            self.genes[x[i]].loc_ue_list[j][1] = self.genes[x[i]].loc_ue_list[j][1] + math.sin(theta_ue) * dis_ue
-            self.genes[x[i]].loc_ue_list[j] = np.clip(self.genes[x[i]].loc_ue_list[j], 0, self.genes[x[i]].ground_width)
-        self.genes[x[i]].task_list = np.random.randint(2621440, 3145729, self.genes[0].M)
-        self.genes[x[i]].block_flag_list = np.random.randint(0, 2, self.genes[0].M)  
-    update(self)
+    if len(self.genes) > 0:  # Ensure there are genes to mutate
+        x = np.random.choice(range(len(self.genes)), size=min(10, len(self.genes)), replace=False)
+        for i in x:
+            for j in range(self.genes[i].M):  
+                tmp = np.random.rand(2)
+                theta_ue = tmp[0] * np.pi * 2  
+                dis_ue = tmp[1] * self.genes[i].delta_t * self.genes[i].v_ue  
+                self.genes[i].loc_ue_list[j][0] += math.cos(theta_ue) * dis_ue
+                self.genes[i].loc_ue_list[j][1] += math.sin(theta_ue) * dis_ue
+                self.genes[i].loc_ue_list[j] = np.clip(self.genes[i].loc_ue_list[j], 0, self.genes[i].ground_width)
+            self.genes[i].task_list = np.random.randint(2621440, 3145729, self.genes[i].M)
+            self.genes[i].block_flag_list = np.random.randint(0, 2, self.genes[i].M)  
+        update(self)
 
+
+# def mutation2(self):
+#     x = np.random.randint(len(self.genes),size = 10)
+#     for i in range(len(x)):
+#         tmp = np.random.rand(2)
+#         theta_uav = tmp[0] * np.pi * 2
+#         dis_uav = tmp[1] * self.genes[0].flight_speed * self.genes[0].t_fly
+#         self.genes[x[i]].loc_uav[0] = dis_uav * math.cos(theta_uav) + self.genes[x[i]].loc_uav[0]
+#         self.genes[x[i]].loc_uav[1] = dis_uav * math.sin(theta_uav) + self.genes[x[i]].loc_uav[1]
+#         self.genes[x[i]].loc_uav = np.clip(self.genes[x[i]].loc_uav,0,self.genes[0].ground_width)
+#     update(self)
 def mutation2(self):
-    x = np.random.randint(len(self.genes),size = 10)
-    for i in range(len(x)):
-        tmp = np.random.rand(2)
-        theta_uav = tmp[0] * np.pi * 2
-        dis_uav = tmp[1] * self.genes[0].flight_speed * self.genes[0].t_fly
-        self.genes[x[i]].loc_uav[0] = dis_uav * math.cos(theta_uav) + self.genes[x[i]].loc_uav[0]
-        self.genes[x[i]].loc_uav[1] = dis_uav * math.sin(theta_uav) + self.genes[x[i]].loc_uav[1]
-        self.genes[x[i]].loc_uav = np.clip(self.genes[x[i]].loc_uav,0,self.genes[0].ground_width)
-    update(self)
+    if len(self.genes) > 0:  # Ensure there are genes to mutate
+        x = np.random.choice(range(len(self.genes)), size=min(10, len(self.genes)), replace=False)
+        for i in x:
+            tmp = np.random.rand(2)
+            theta_uav = tmp[0] * np.pi * 2
+            dis_uav = tmp[1] * self.genes[i].flight_speed * self.genes[i].t_fly
+            self.genes[i].loc_uav[0] += dis_uav * math.cos(theta_uav)
+            self.genes[i].loc_uav[1] += dis_uav * math.sin(theta_uav)
+            self.genes[i].loc_uav = np.clip(self.genes[i].loc_uav, 0, self.genes[i].ground_width)
+        update(self)
 
 ###############################  training  ####################################
 
