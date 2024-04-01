@@ -27,7 +27,7 @@ tf.compat.v1.disable_eager_execution()
 
 #####################  hyper parameters  ####################
 
-MAX_EPISODES = 1000
+MAX_EPISODES = 100
 # MAX_EPISODES = 50000
 LR_A = 0.001  # learning rate for actor
 LR_C = 0.002  # learning rate for critic
@@ -212,47 +212,56 @@ class Indv(object):
             if is_terminal or step_redo:
                 break
 
-def crossOver(a,b):
-    x = len(a.genes) if len(a.genes) < len(b.genes) else len(b.genes)
-    i1 = np.random.randint(x)
-    i2 = (i1 + 1 + np.random.randint(x - 1)) % x
-    n1 = copy.deepcopy(a)
-    n2 = copy.deepcopy(b)
-    if i1 < i2:
-        i = i1
-        j = i2
-    else:
-        i = i2
-        j = i1
-    while i != j:
-        n1.genes[i] = b.genes[i]
-        n2.genes[i] = a.genes[i]
-        i = i + 1
-    """...
-    sum1 = 0
-    sum2 = 0
-    for k in range(len(a)):
-        task_size1 = n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] 
-        task_size2 = n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] 
-        sum1 += task_size1
-        sum2 += task_size2
-    for k in range(len(a)):
-        n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] *= n1.genes[0].sum_task_size/sum1
-        n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] *= n2.genes[0].sum_task_size/sum2
-    ..."""
-    adjust_task_sizes(n1, n2, a.genes)
-    update(n1)
-    update(n2)
-    return n1,n2
-def adjust_task_sizes(n1, n2, tasks):
-    sum1 = sum(n1.genes[k][0].task_list[n1.genes[k][1][0] * n1.genes[k][0].M] for k in range(len(tasks)))
-    sum2 = sum(n2.genes[k][0].task_list[n2.genes[k][1][0] * n2.genes[k][0].M] for k in range(len(tasks)))
-    
-    for k in range(len(tasks)):
-        n1_factor = n1.genes[0][0].sum_task_size / sum1
-        n2_factor = n2.genes[0][0].sum_task_size / sum2
-        n1.genes[k][0].task_list[n1.genes[k][1][0] * n1.genes[k][0].M] *= n1_factor
-        n2.genes[k][0].task_list[n2.genes[k][1][0] * n2.genes[k][0].M] *= n2_factor
+# def crossOver(a,b):
+#     x = len(a.genes) if len(a.genes) < len(b.genes) else len(b.genes)
+#     i1 = np.random.randint(x)
+#     i2 = (i1 + 1 + np.random.randint(x - 1)) % x
+#     n1 = copy.deepcopy(a)
+#     n2 = copy.deepcopy(b)
+#     if i1 < i2:
+#         i = i1
+#         j = i2
+#     else:
+#         i = i2
+#         j = i1
+#     while i != j:
+#         n1.genes[i] = b.genes[i]
+#         n2.genes[i] = a.genes[i]
+#         i = i + 1
+#     """...
+#     sum1 = 0
+#     sum2 = 0
+#     for k in range(len(a)):
+#         task_size1 = n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] 
+#         task_size2 = n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] 
+#         sum1 += task_size1
+#         sum2 += task_size2
+#     for k in range(len(a)):
+#         n1.genes[k].task_list[n1.genes[k].action[0] * n1.genes[k].M] *= n1.genes[0].sum_task_size/sum1
+#         n2.genes[k].task_list[n2.genes[k].action[0] * n2.genes[k].M] *= n2.genes[0].sum_task_size/sum2
+#     ..."""
+#     adjust_task_sizes(n1, n2, a.genes)
+#     update(n1)
+#     update(n2)
+#     return n1,n2
+def adjust_task_sizes(offspring1, offspring2):
+    total_workload = sum(gene.total_task_size() for gene in (offspring1.genes + offspring2.genes)) / 2
+    for offspring in (offspring1, offspring2):
+        current_workload = sum(gene.total_task_size() for gene in offspring.genes)
+        adjustment_factor = total_workload / current_workload
+        for gene in offspring.genes:
+            gene.adjust_tasks(adjustment_factor)
+
+def crossOver(parent1, parent2):
+    min_length = min(len(parent1.genes), len(parent2.genes))
+    i1, i2 = np.sort(np.random.choice(range(min_length), 2, replace=False))
+    offspring1, offspring2 = copy.deepcopy(parent1), copy.deepcopy(parent2)
+    for i in range(i1, i2 + 1):
+        offspring1.genes[i], offspring2.genes[i] = offspring2.genes[i], offspring1.genes[i]
+    adjust_task_sizes(offspring1, offspring2)
+    update(offspring1)
+    update(offspring2)
+    return offspring1, offspring2
 
 
 
@@ -443,6 +452,11 @@ for i in range(MAX_EPISODES):
                     #file_obj.write("\n======== This episode is done ========")  # 本episode结束
                     print('Episode:', i, ' Steps: %2d' % j, ' Reward: %7.2f' % ep_reward, 'Explore: %.3f' % var,file = file_obj)
                     # Print and write the episode information to the file with a newline character
+                file_name = 'output_ddpg_' + str(self.bandwidth_nums) + 'MHz.txt'
+            # file_name = 'output.txt'
+                with open(file_name, 'a') as file_obj:
+                    file_obj.write("\n======== This episode is done ========")  # 本episode结束
+                break
                 break
             j = j + 1
         if i > MAX_EPISODES - 64:
