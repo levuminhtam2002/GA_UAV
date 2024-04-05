@@ -607,7 +607,7 @@ for i in range(MAX_EPISODES):
     #     population = np.append(population,idv)
 # for i in range(len(population[0].genes)):
 #     print(' E_battery_uav: %7.2f' % population[0].genes[i].e_battery_uav)
-for i in range(generations):
+for j in range(generations):
     while(len(population) < populationLimit):
         i1 = np.random.randint(len(population))
         i2 = (i1 + 1 + np.random.randint(len(population) - 1)) % len(population)
@@ -633,11 +633,11 @@ for i in range(generations):
     bestState = population[0]
     #worstState = population[63]
     bestReward = np.append(bestReward,bestState._ep_reward)
-    print('Generation:', i,' Reward: %7.2f' % bestState._ep_reward, 'mutation_rate: %.3f' % mutation_rate)
+    print('Generation:', j,' Reward: %7.2f' % bestState._ep_reward, 'mutation_rate: %.3f' % mutation_rate)
     file_name = 'output_ga_ver1_GA.txt'
     with open(file_name,'a') as file_obj:
         #print('Generation:', i,' worstReward: %7.2f' % worstState._ep_reward, 'mutation_rate: %.3f' % mutation_rate)
-        print('Generation:', i,' Reward: %7.2f' % bestState._ep_reward, 'mutation_rate: %.3f' % mutation_rate, file = file_obj)
+        print('Generation:', j,' Reward: %7.2f' % bestState._ep_reward, 'mutation_rate: %.3f' % mutation_rate, file = file_obj)
 
 print('Running time: ', time.time() - t1)
 plt.plot(bestReward)
