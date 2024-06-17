@@ -1,7 +1,10 @@
-import numpy as np
 import math
+import random
 
-class Individuals(object):
+import numpy as np
+
+
+class UAVEnv(object):
     height = ground_length = ground_width = 100  # 场地长宽均为100m，UAV飞行高度也是 - Chiều dài và chiều rộng của địa điểm và chiều cao chuyến bay của UAV cũng là 100m 
     sum_task_size = 100 * 1048576  # 总计算任务60 Mbits --> 60 80 100 120 140 - Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
     loc_uav = [50, 50]
@@ -27,7 +30,7 @@ class Individuals(object):
     e_battery_uav = 500000  # uav电池电量: 500kJ. ref: Mobile Edge Computing via a UAV-Mounted Cloudlet: Optimization of Bit Allocation and Path Planning
 
     #################### ues ####################
-    M = 4  # UE数量 - Số lượng UE
+    M = 10  # UE数量 - Số lượng UE
     block_flag_list = np.random.randint(0, 2, M)  # 4个ue，ue的遮挡情况 - tắc của ue
     loc_ue_list = np.random.randint(0, 101, size=[M, 2])  # 位置信息:x在0-100随机 - Thông tin vị trí: x là ngẫu nhiên từ 0-100
     # task_list = np.random.randint(1572864, 2097153, M)      # 随机计算任务1.5~2Mbits ->对应总任务大小60 - Tác vụ tính toán ngẫu nhiên 1,5~2Mbits -> tổng kích thước tác vụ tương ứng 60
@@ -46,6 +49,52 @@ class Individuals(object):
     # 2,3. biểu thị góc bay và khoảng cách
     # 4. biểu thị tốc độ hoàn thành tác vụ hiện tại trên ue ?? tỉ lệ offloading task trên ue
     state_dim = 4 + M * 4  # uav battery remain, uav loc, remaining sum task size, all ue loc, all ue task size, all ue block_flag
+    act = np.random.uniform(0,1,size = (M,))
+
+    def __init__(self):
+        # uav battery remain, uav loc, remaining sum task size, all ue loc, all ue task size, all ue block_flag
+        self.start_state = np.append(self.e_battery_uav, self.loc_uav)
+        self.start_state = np.append(self.start_state, self.sum_task_size)
+        self.start_state = np.append(self.start_state, np.ravel(self.loc_ue_list))
+        self.start_state = np.append(self.start_state, self.task_list)
+        self.start_state = np.append(self.start_state, self.block_flag_list)
+        self.state = self.start_state
+
+    def reset_env(self):
+        self.sum_task_size = 100 * 1048576  # 总计算任务60 Mbits -> 60 80 100 120 140
+        self.e_battery_uav = 500000  # uav电池电量: 500kJ
+        self.loc_uav = [50, 50]
+        self.loc_ue_list = np.random.randint(0, 101, size=[self.M, 2])  # 位置信息:x在0-100随机
+        self.reset_step()
+
+    def reset_step(self):
+        # self.task_list = np.random.randint(1572864, 2097153, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        # self.task_list = np.random.randint(2097152, 2621441, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        # self.task_list = np.random.randint(2621440, 3145729, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        self.task_list = np.random.randint(2621440, 3145729, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        # self.task_list = np.random.randint(3145728, 3670017, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        # self.task_list = np.random.randint(3670016, 4194305, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        self.block_flag_list = np.random.randint(0, 2, self.M)  # 4个ue，ue的遮挡情况 - tình trạng tắc ue
+
+    def reset(self):
+        self.reset_env()
+        # uav battery remain, uav loc, remaining sum task size, all ue loc, all ue task size, all ue block_flag
+        self.state = np.append(self.e_battery_uav, self.loc_uav)
+        self.state = np.append(self.state, self.sum_task_size)
+        self.state = np.append(self.state, np.ravel(self.loc_ue_list))
+        self.state = np.append(self.state, self.task_list)
+        self.state = np.append(self.state, self.block_flag_list)
+        return self._get_obs()
+
+    def _get_obs(self):
+        # uav battery remain, uav loc, remaining sum task size, all ue loc, all ue task size, all ue block_flag
+        self.state = np.append(self.e_battery_uav, self.loc_uav)
+        self.state = np.append(self.state, self.sum_task_size)
+        self.state = np.append(self.state, np.ravel(self.loc_ue_list))
+        self.state = np.append(self.state, self.task_list)
+        self.state = np.append(self.state, self.block_flag_list)
+        return self.state
+
     def step(self, action):  # 0: 选择服务的ue编号 ; 1: 方向theta; 2: 距离d; 3: offloading ratio
         step_redo = False
         is_terminal = False
@@ -98,13 +147,13 @@ class Individuals(object):
             # 更新下一时刻状态 - cập nhật trạng thái tiếp theo
             self.e_battery_uav = self.e_battery_uav - e_server  # uav 剩余电量
             self.reset2(delay, self.loc_uav[0], self.loc_uav[1], offloading_ratio, task_size, ue_id)
-        elif self.e_battery_uav < e_fly or self.e_battery_uav - e_fly < e_server:  # uav电量不能支持计算 - Nguồn UAV không thể hỗ trợ tính toán
+        elif self.e_battery_uav < e_fly or self.e_battery_uav - e_fly < e_server:  # uav电量不能支持计算
             delay = self.com_delay(self.loc_ue_list[ue_id], np.array([loc_uav_after_fly_x, loc_uav_after_fly_y]),
                                    0, task_size, block_flag)  # 计算delay
             reward = -delay
             self.reset2(delay, loc_uav_after_fly_x, loc_uav_after_fly_y, 0, task_size, ue_id)
             offloading_ratio_change = True
-        else:  # 电量支持飞行,且计算任务合理,且计算任务能在剩余电量内计算 - Dung lượng pin hỗ trợ chuyến bay, các tác vụ tính toán hợp lý và các tác vụ tính toán có thể được tính toán trong dung lượng pin còn lại.
+        else:  # 电量支持飞行,且计算任务合理,且计算任务能在剩余电量内计算
             delay = self.com_delay(self.loc_ue_list[ue_id], np.array([loc_uav_after_fly_x, loc_uav_after_fly_y]),
                                    offloading_ratio, task_size, block_flag)  # 计算delay
             reward = -delay
@@ -115,20 +164,20 @@ class Individuals(object):
             self.reset2(delay, loc_uav_after_fly_x, loc_uav_after_fly_y, offloading_ratio, task_size,
                                         ue_id)   # 重置ue任务大小，剩余总任务大小，ue位置，并记录到文件
 
-        return reward, is_terminal, step_redo, offloading_ratio_change, reset_dist
+        return self._get_obs(), reward, is_terminal, step_redo, offloading_ratio_change, reset_dist
 
     # 重置ue任务大小，剩余总任务大小，ue位置，并记录到文件
     # Đặt lại kích thước tác vụ ue, tổng kích thước tác vụ còn lại, vị trí ue và ghi vào tệp
     def reset2(self, delay, x, y, offloading_ratio, task_size, ue_id):
-        self.sum_task_size -= self.task_list[ue_id]  # 剩余任务量
+        self.sum_task_size -= self.task_list[ue_id]  # 剩余任务量 - nhiệm vụ còn lại
         for i in range(self.M):  # ue随机移动后的位置 - vị trí sau khi di chuyển ngẫu nhiên
             tmp = np.random.rand(2)
             theta_ue = tmp[0] * np.pi * 2  # ue 随机移动角度 - góc chuyển động ngẫu nhiên
-            dis_ue = tmp[1] * self.delta_t * self.v_ue  # ue 随机移动距离 - Khoảng cách di chuyển ngẫu nhiên của ue
+            dis_ue = tmp[1] * self.delta_t * self.v_ue  # ue 随机移动距离
             self.loc_ue_list[i][0] = self.loc_ue_list[i][0] + math.cos(theta_ue) * dis_ue
             self.loc_ue_list[i][1] = self.loc_ue_list[i][1] + math.sin(theta_ue) * dis_ue
             self.loc_ue_list[i] = np.clip(self.loc_ue_list[i], 0, self.ground_width)
-        self.reset_step()  # ue随机计算任务1~2Mbits # 4个ue，ue的遮挡情况 - ue tác vụ tính toán ngẫu nhiên 1~2Mbits # 4 ue, tình huống tắc ue
+        self.reset_step()  # ue随机计算任务1~2Mbits # 4个ue，ue的遮挡情况
         # 记录UE花费
         file_name = 'output.txt'
         # file_name = 'output_ddpg_' + str(self.bandwidth_nums) + 'MHz.txt'
