@@ -71,10 +71,10 @@ class DDPG(object):
         self.S_ = tf.compat.v1.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.compat.v1.placeholder(tf.float32, [None, 1], 'r')
 
-        with tf.compat.v1.variable_scope('Actor'):
+        with tf.compat.v1.variable_scope('Actor', reuse=tf.compat.v1.AUTO_REUSE):
             self.a = self._build_a(self.S, scope='eval', trainable=True)
             a_ = self._build_a(self.S_, scope='target', trainable=False)
-        with tf.compat.v1.variable_scope('Critic'):
+        with tf.compat.v1.variable_scope('Critic', reuse=tf.compat.v1.AUTO_REUSE):
             q = self._build_c(self.S, self.a, scope='eval', trainable=True)
             q_ = self._build_c(self.S_, a_, scope='target', trainable=False)
 
@@ -117,14 +117,14 @@ class DDPG(object):
         self.pointer += 1
 
     def _build_a(self, s, scope, trainable):
-        with tf.compat.v1.variable_scope(scope):
+        with tf.compat.v1.variable_scope(scope, reuse=tf.compat.v1.AUTO_REUSE):
             net = tf.compat.v1.layers.dense(s, 400, activation=tf.nn.relu6, name='l1', trainable=trainable)
             net = tf.compat.v1.layers.dense(net, 300, activation=tf.nn.relu6, name='l2', trainable=trainable)
             a = tf.compat.v1.layers.dense(net, self.a_dim, activation=tf.nn.tanh, name='a', trainable=trainable)
             return tf.multiply(a, self.a_bound[1], name='scaled_a')
 
     def _build_c(self, s, a, scope, trainable):
-        with tf.compat.v1.variable_scope(scope):
+        with tf.compat.v1.variable_scope(scope, reuse=tf.compat.v1.AUTO_REUSE):
             n_l1 = 400
             w1_s = tf.compat.v1.get_variable('w1_s', [self.s_dim, n_l1], trainable=trainable)
             w1_a = tf.compat.v1.get_variable('w1_a', [self.a_dim, n_l1], trainable=trainable)

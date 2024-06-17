@@ -195,7 +195,7 @@ for i in range(MAX_EPISODES):
         if j == MAX_EP_STEPS - 1 or is_terminal:
             print('Episode:', i, ' Steps: %2d' % j, ' Reward: %7.2f' % ep_reward, 'Explore: %.3f' % var)
             ep_reward_list = np.append(ep_reward_list, ep_reward)
-            # file_name = 'output_ddpg_' + str(self.bandwidth_nums) + 'MHz.txt'
+            file_name = 'output_ddpg_' + str(self.bandwidth_nums) + 'MHz.txt'
             file_name = 'output.txt'
             with open(file_name, 'a') as file_obj:
                 file_obj.write("\n======== This episode is done ========")  # 本episode结束
