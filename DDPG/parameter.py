@@ -3,7 +3,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import copy
 import time
-
+from UAV_env import UAVEnv
 # Disable eager execution
 tf.compat.v1.disable_eager_execution()
 
@@ -34,9 +34,8 @@ def tune_hyperparameter(values, fixed_params, param_name):
             best_value = value
         
         # Save results to a text file
-        with open('/content/drive/MyDrive/DuLieuThucNghiem/ddpg_results.txt', 'a') as file:
+        with open('ddpg_results.txt', 'a') as file:
             file.write(f"LR_A: {params['lr_a']}, LR_C: {params['lr_c']}, GAMMA: {params['gamma']}, TAU: {params['tau']}, AVG_REWARD: {avg_reward}\n")
-    
     return best_value, best_reward, results
 
 def train_ddpg(lr_a, lr_c, gamma, tau):
