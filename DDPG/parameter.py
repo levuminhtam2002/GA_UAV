@@ -84,7 +84,10 @@ class DDPG(object):
         self.ct_params = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES, scope='Critic/target')
 
         self.soft_replace = [tf.compat.v1.assign(t, (1 - tau) * t + tau * e)
-                             for t, e in zip(self.at_params + self.ct_params, self.ae_params + self.ce_params)]
+                     for t, e in zip(self.at_params, self.ae_params)] + \
+                    [tf.compat.v1.assign(t, (1 - tau) * t + tau * e)
+                     for t, e in zip(self.ct_params, self.ce_params)]
+
 
         q_target = self.R + gamma * q_
         td_error = tf.compat.v1.losses.mean_squared_error(labels=q_target, predictions=q)
@@ -131,6 +134,7 @@ class DDPG(object):
             b1 = tf.compat.v1.get_variable('b1', [1, n_l1], trainable=trainable)
             net = tf.nn.relu6(tf.matmul(s, w1_s) + tf.matmul(a, w1_a) + b1)
             return tf.compat.v1.layers.dense(net, 1, trainable=trainable)
+
 
 # Define the ranges for hyperparameters
 lr_a_values = [0.001, 0.01, 0.1]
