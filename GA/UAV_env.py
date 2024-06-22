@@ -30,7 +30,7 @@ class UAVEnv(object):
     e_battery_uav = 500000  # Năng lượng pin UAV: 500kJ. ref: Mobile Edge Computing via a UAV-Mounted Cloudlet: Optimization of Bit Allocation and Path Planning
 
     #################### ues ####################
-    M = 3 # Số lượng UE
+    M = 4 # Số lượng UE
     block_flag_list = np.random.randint(0, 2, M)  # Tình trạng tắc của UE
     loc_ue_list = np.random.randint(0, 101, size=[M, 2])  # Thông tin vị trí: x là ngẫu nhiên từ 0-100
     # task_list = np.random.randint(1572864, 2097153, M)  # Tác vụ tính toán ngẫu nhiên 1,5~2Mbits -> tổng kích thước tác vụ tương ứng 60
