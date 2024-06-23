@@ -152,15 +152,15 @@ class UAVEnv(object):
             # self.task_list = np.random.randint(1048576, 2097153, self.M)  # ue随机计算任务1~2Mbits
             self.reset_step()
 
-            # # 记录UE花费
-            # file_name = 'output.txt'
-            # # file_name = 'output_' + str(len(self.UE_loc_list)) + 'UE_DDPG.txt'
-            # with open(file_name, 'a') as file_obj:
-            #     file_obj.write("\nUE-" + '{:d}'.format(ue_id) + ", task size: " + '{:d}'.format(
-            #         int(task_size)) + ", offloading ratio:" + '{:.2f}'.format(offloading_ratio))
-            #     file_obj.write("\ndelay:" + '{:.2f}'.format(delay))
-            #     file_obj.write("\nUAV hover loc:" + "[" + '{:.2f}'.format(loc_uav_after_fly_x) +
-            #                    ', ' + '{:.2f}'.format(loc_uav_after_fly_y) + ']')  # 输出保留两位结果
+            # 记录UE花费
+            file_name = 'output.txt'
+            # file_name = 'output_' + str(len(self.UE_loc_list)) + 'UE_DDPG.txt'
+            with open(file_name, 'a') as file_obj:
+                file_obj.write("\nUE-" + '{:d}'.format(ue_id) + ", task size: " + '{:d}'.format(
+                    int(task_size)) + ", offloading ratio:" + '{:.2f}'.format(offloading_ratio))
+                file_obj.write("\ndelay:" + '{:.2f}'.format(delay))
+                file_obj.write("\nUAV hover loc:" + "[" + '{:.2f}'.format(loc_uav_after_fly_x) +
+                               ', ' + '{:.2f}'.format(loc_uav_after_fly_y) + ']')  # 输出保留两位结果
 
         return reward, is_terminal, step_redo
 
