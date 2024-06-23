@@ -58,10 +58,10 @@ class UAVEnv(object):
         self.reset_step()
 
     def reset_step(self):
-        # self.task_list = np.random.randint(1572864, 2097153, self.M)  # Tác vụ tính toán ngẫu nhiên 1,5~2Mbits
+        self.task_list = np.random.randint(1572864, 2097153, self.M)  # Tác vụ tính toán ngẫu nhiên 1,5~2Mbits
         # self.task_list = np.random.randint(2097152, 2621441, self.M)  # Tác vụ tính toán ngẫu nhiên 2~2.5Mbits
         # self.task_list = np.random.randint(2621440, 3145729, self.M)  # Tác vụ tính toán ngẫu nhiên 2.5~3Mbits
-        self.task_list = np.random.randint(2621440, 3145729, self.M)  # Tác vụ tính toán ngẫu nhiên 2.5~3Mbits
+        # self.task_list = np.random.randint(2621440, 3145729, self.M)  # Tác vụ tính toán ngẫu nhiên 2.5~3Mbits
         # self.task_list = np.random.randint(3145728, 3670017, self.M)  # Tác vụ tính toán ngẫu nhiên 3~3.5Mbits
         # self.task_list = np.random.randint(3670016, 4194305, self.M)  # Tác vụ tính toán ngẫu nhiên 3.5~4Mbits
         self.block_flag_list = np.random.randint(0, 2, self.M)  # Tình trạng tắc của UE
