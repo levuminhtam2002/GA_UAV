@@ -32,9 +32,9 @@ class UAVEnv(object):
     # task_list = np.random.randint(1048576, 2097153, M)    # 随机计算任务1~2Mbits
     # task_list = np.random.randint(1572864, 2097153, M)  # 随机计算任务1.5~2Mbits
     # task_list = np.random.randint(2097152, 2621441, M) 
-    # task_list = np.random.randint(2621440, 3145729, M) 
+    task_list = np.random.randint(2621440, 3145729, M) 
     # task_list = np.random.randint(3145728, 3670017, M) 
-    task_list = np.random.randint(3670016, 4194305, M) 
+    # task_list = np.random.randint(3670016, 4194305, M) 
     # ue位置转移概率
     # 0:位置不变; 1:x+1,y; 2:x,y+1; 3:x-1,y; 4:x,y-1
     loc_ue_trans_pro = np.array([[.6, .1, .1, .1, .1],
@@ -66,7 +66,7 @@ class UAVEnv(object):
         return self._get_obs()
 
     def reset_env(self):
-        self.sum_task_size = 100 * 1048576  # 总计算任务60 Mbits
+        self.sum_task_size = 140 * 1048576  # 总计算任务60 Mbits
         self.e_battery_uav = 500000  # uav电池电量: 500kJ
         self.loc_uav = [50, 50]
         self.loc_ue_list = np.random.randint(0, 101, size=[self.M, 2])  # 位置信息:x在0-100随机
@@ -75,9 +75,9 @@ class UAVEnv(object):
     def reset_step(self):
         # self.task_list = np.random.randint(1572864, 2097153, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
         # self.task_list = np.random.randint(2097152, 2621441, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
-        # self.task_list = np.random.randint(2621440, 3145729, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        self.task_list = np.random.randint(2621440, 3145729, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
         # self.task_list = np.random.randint(3145728, 3670017, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
-        self.task_list = np.random.randint(3670016, 4194305, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        # self.task_list = np.random.randint(3670016, 4194305, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
         self.block_flag_list = np.random.randint(0, 2, self.M)  # 4个ue，ue的遮挡情况
 
     def _get_obs(self):
@@ -248,4 +248,4 @@ def diff_f_ue():
 if __name__ == '__main__':
     diff_f_ue()
     # diff_bandwidth()  # 不同带宽[54.71944 53.56894 53.20107 52.99682 52.88649 52.81595 52.75406 52.71248 52.68364 52.65391]
-    # diff_task_size()  # 不同任务大小：60-140Mbits [54.6918, 72.9328, 91.1929, 109.4351, 127.6840]
+    diff_task_size()  # 不同任务大小：60-140Mbits [54.6918, 72.9328, 91.1929, 109.4351, 127.6840]

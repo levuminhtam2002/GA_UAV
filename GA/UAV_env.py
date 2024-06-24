@@ -35,9 +35,9 @@ class UAVEnv(object):
     loc_ue_list = np.random.randint(0, 101, size=[M, 2])  # Thông tin vị trí: x là ngẫu nhiên từ 0-100
     # task_list = np.random.randint(1572864, 2097153, M)  # Tác vụ tính toán ngẫu nhiên 1,5~2Mbits -> tổng kích thước tác vụ tương ứng 60
     # task_list = np.random.randint(2097153, 2621440, M)  # Tác vụ tính toán ngẫu nhiên 2~2.5Mbits -> 80
-    # task_list = np.random.randint(2621440, 3145729, M) 
+    task_list = np.random.randint(2621440, 3145729, M) 
     # task_list = np.random.randint(3145728, 3670017, M) 
-    task_list = np.random.randint(3670016, 4194305, M) 
+    # task_list = np.random.randint(3670016, 4194305, M) 
 
     action_bound = [-1, 1]  # Tương ứng với hàm kích hoạt tanh
     action_dim = 4  # Đầu tiên biểu thị id của UE; giữa biểu thị góc bay và khoảng cách; cuối biểu thị tốc độ hoàn thành tác vụ hiện tại trên UE (tỷ lệ offloading task trên UE)
@@ -54,7 +54,7 @@ class UAVEnv(object):
         self.state = self.start_state
 
     def reset_env(self):
-        self.sum_task_size = 100 * 1048576  # Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
+        self.sum_task_size = 140 * 1048576  # Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
         self.e_battery_uav = 500000  # Năng lượng pin UAV: 500kJ
         self.loc_uav = [50, 50]
         self.loc_ue_list = np.random.randint(0, 101, size=[self.M, 2])  # Thông tin vị trí: x là ngẫu nhiên từ 0-100
@@ -64,9 +64,9 @@ class UAVEnv(object):
         # self.task_list = np.random.randint(1572864, 2097153, self.M)  # Tác vụ tính toán ngẫu nhiên 1,5~2Mbits
         # self.task_list = np.random.randint(2097152, 2621441, self.M)  # Tác vụ tính toán ngẫu nhiên 2~2.5Mbits
         # self.task_list = np.random.randint(2621440, 3145729, self.M)  # Tác vụ tính toán ngẫu nhiên 2.5~3Mbits
-        # self.task_list = np.random.randint(2621440, 3145729, self.M)  # Tác vụ tính toán ngẫu nhiên 2.5~3Mbits
+        self.task_list = np.random.randint(2621440, 3145729, self.M)  # Tác vụ tính toán ngẫu nhiên 2.5~3Mbits
         # self.task_list = np.random.randint(3145728, 3670017, self.M)  # Tác vụ tính toán ngẫu nhiên 3~3.5Mbits
-        self.task_list = np.random.randint(3670016, 4194305, self.M)  # Tác vụ tính toán ngẫu nhiên 3.5~4Mbits
+        # self.task_list = np.random.randint(3670016, 4194305, self.M)  # Tác vụ tính toán ngẫu nhiên 3.5~4Mbits
         self.block_flag_list = np.random.randint(0, 2, self.M)  # Tình trạng tắc của UE
 
     def reset(self):
