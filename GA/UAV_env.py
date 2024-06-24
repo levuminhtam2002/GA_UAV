@@ -6,7 +6,7 @@ import numpy as np
 
 class UAVEnv(object):
     height = ground_length = ground_width = 100  # Chiều dài và chiều rộng của địa điểm và chiều cao chuyến bay của UAV cũng là 100m 
-    sum_task_size = 100 * 1048576  # Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
+    sum_task_size = 140 * 1048576  # Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
     loc_uav = [50, 50]
     bandwidth_nums = 1
     B = bandwidth_nums * 10 ** 6  # Băng thông 1MHz

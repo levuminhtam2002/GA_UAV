@@ -235,7 +235,7 @@ def update(self):
         env_ = copy.deepcopy(self.genes[i])
         if i == 0:
             env_.e_battery_uav = 50000
-            env_.sum_task_size = 100 * 1048576
+            env_.sum_task_size = 140 * 1048576
         else:
             env_.e_battery_uav = self.genes[i-1].e_battery_uav
             env_.sum_task_size = self.genes[i-1].sum_task_size
