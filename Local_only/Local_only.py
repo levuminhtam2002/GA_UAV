@@ -33,8 +33,8 @@ class UAVEnv(object):
     # task_list = np.random.randint(1048576, 2097153, M)    # 随机计算任务1~2Mbits
     # task_list = np.random.randint(1572864, 2097153, M)  # 随机计算任务1.5~2Mbits
     # task_list = np.random.randint(2097152, 2621441, M) 
-    task_list = np.random.randint(2621440, 3145729, M) 
-    # task_list = np.random.randint(3145728, 3670017, M) 
+    # task_list = np.random.randint(2621440, 3145729, M) 
+    task_list = np.random.randint(3145728, 3670017, M) 
     # task_list = np.random.randint(3670016, 4194305, M) 
     
     # ue位置转移概率
@@ -77,8 +77,8 @@ class UAVEnv(object):
     def reset_step(self):
         # self.task_list = np.random.randint(1572864, 2097153, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
         # self.task_list = np.random.randint(2097152, 2621441, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
-        self.task_list = np.random.randint(2621440, 3145729, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
-        # self.task_list = np.random.randint(3145728, 3670017, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        # self.task_list = np.random.randint(2621440, 3145729, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
+        self.task_list = np.random.randint(3145728, 3670017, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
         # self.task_list = np.random.randint(3670016, 4194305, self.M)  # 随机计算任务1.5~2Mbits -> 1.5~2 2~2.5 2.5~3 3~3.5 3.5~4
         self.block_flag_list = np.random.randint(0, 2, self.M)  # 4个ue，ue的遮挡情况
 
