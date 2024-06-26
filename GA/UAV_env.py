@@ -54,7 +54,7 @@ class UAVEnv(object):
         self.state = self.start_state
 
     def reset_env(self):
-        self.sum_task_size = 140 * 1048576  # Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
+        self.sum_task_size = 100 * 1048576  # Tổng số tác vụ điện toán 60 Mbits -> 60 80 100 120 140
         self.e_battery_uav = 500000  # Năng lượng pin UAV: 500kJ
         self.loc_uav = [50, 50]
         self.loc_ue_list = np.random.randint(0, 101, size=[self.M, 2])  # Thông tin vị trí: x là ngẫu nhiên từ 0-100
@@ -173,8 +173,7 @@ class UAVEnv(object):
         file_name = 'output.txt'
         # file_name = 'output_ddpg_' + str(self.bandwidth_nums) + 'MHz.txt'
         with open(file_name, 'a') as file_obj:
-            file_obj.write("\nUE-" + '{:d}'.format(ue_id) + ", kích thước tác vụ: " + '{:d}'.format(int(task_size)) + ", tỷ lệ offloading:" + '{:.2f}'.format(offloading_ratio))
-            file_obj.write("\nđộ trễ:" + '{:.2f}'.format(delay))
+            file_obj.write("\nUE-" + '{:d}'.format(ue_id) + ", kích thước tác vụ: " + '{:d}'.format(int(task_size)) + ", tỷ lệ offloading:" + '{:.2f}'.format(offloading_ratio)+ ", độ trễ:" + '{:.2f}'.format(delay))
             file_obj.write("\nVị trí hover UAV:" + "[" + '{:.2f}'.format(x) + ', ' + '{:.2f}'.format(y) + ']')  # Xuất kết quả với hai chữ số thập phân
 
     # Tính toán chi phí
